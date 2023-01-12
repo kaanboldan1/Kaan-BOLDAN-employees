@@ -44,21 +44,16 @@ public class PairApi {
 
     private static java.util.Date getDate(String date) {
         //String to java.util.Date conversion
-
-
         date = date.trim();
+        if (date.contains("NULL")) date = new Date(System.currentTimeMillis()).toString();
 
-        if (date.contains("NULL"))
-            date = new Date(System.currentTimeMillis()).toString();
         try {
             LocalDate localeDate = LocalDate.parse(date);
             return getDate(localeDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
-
     }
 
     private static java.util.Date getDate(LocalDate date) {
@@ -66,41 +61,31 @@ public class PairApi {
         return Date.valueOf(date);
     }
 
-
     public static StringBuilder checkConflict(List<Employees> employeesList) {
         StringBuilder returnValue = new StringBuilder();
         for (int i = 0; i < employeesList.size(); i++) {
             ArrayList<String> workwith = new ArrayList<>();
             workwith.add(employeesList.get(i).getEmpID());
             for (int j = 0; j < employeesList.size(); j++) {
-                if (i == j)
-                    continue;
+                if (i == j) continue;
                 //if employee worked long time than other employee
-                if (employeesList.get(i).getDateFrom().after(employeesList.get(j).getDateFrom()) &&
-                        employeesList.get(i).getDateTo().before(employeesList.get(j).getDateTo())) {
+                if (employeesList.get(i).getDateFrom().after(employeesList.get(j).getDateFrom()) && employeesList.get(i).getDateTo().before(employeesList.get(j).getDateTo()) && employeesList.get(i).getProjectID().contains(employeesList.get(j).getProjectID())) {
                     workwith.add(employeesList.get(j).getEmpID());
-                    long diff = employeesList.get(j).getDateFrom().getTime() - employeesList.get(i).getDateFrom().getTime();
+                    long diff = employeesList.get(i).getDateFrom().getTime() - employeesList.get(j).getDateFrom().getTime();
                     long days = TimeUnit.MILLISECONDS.toDays(diff);
+                    workwith.add("Project Id:" + employeesList.get(i).getProjectID());
+                    workwith.add("Work with days:" + days);
                 }
             }
-            if (workwith.size() > 1) {
+            if (workwith.size() > 3) {
                 StringBuilder with = new StringBuilder();
                 for (int j = 0; j < workwith.size(); j++) {
-                    if (j < workwith.size() - 1)
-                        with.append(workwith.get(j)).append(", ");
-
-                    else
-                        with.append(workwith.get(j));
-
-
+                    if (j < workwith.size() - 1) with.append(workwith.get(j)).append(", ");
+                    else with.append(workwith.get(j));
                 }
-                returnValue.append(with+"<br> ");
-
-
+                returnValue.append(with + "<br> ");
             }
         }
         return returnValue;
     }
-
-
 }

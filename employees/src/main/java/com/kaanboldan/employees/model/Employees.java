@@ -17,7 +17,7 @@ public class Employees {
     public String getEmpID() {
         return empID;
     }
-
+    public String getProjectID() {return projectID;}
     public void setEmpID(String empID) {
         this.empID = empID;
     }

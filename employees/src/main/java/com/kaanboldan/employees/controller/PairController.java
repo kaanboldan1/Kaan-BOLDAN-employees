@@ -11,20 +11,13 @@ import static com.kaanboldan.employees.api.PairApi.*;
 
 @RestController
 public class PairController {
-    @GetMapping("/deneme")
+    @GetMapping("/test")
     public String isWorking() {
         return "Hello, I'm working.";
     }
-
-    @GetMapping(value = "/getPair/{filePath}")
-    public StringBuilder getUserViaFilePath(@PathVariable("filePath") String filePath){
-        List<Employees> employeesList = getEmployeesList(filePath);
-        return checkConflict(employeesList);
-    }
-
-    @GetMapping(value = "/getPair")
+    @GetMapping(value = "/getpair")
     public StringBuilder getUser(){
-        String filePath="C:\\Users\\kaanboldan\\IdeaProjects\\sirmaSolution1\\file.csv";
+        String filePath="src/main/java/com/kaanboldan/employees/file.csv";
         List<Employees> employeesList = getEmployeesList(filePath);
         return checkConflict(employeesList);
     }
